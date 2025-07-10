@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/TailspinLearn1709/SpaceGameWebPipeline/_apis/build/status%2Fdalsonn.mslearn-tailspin-spacegame-web?branchName=main)](https://dev.azure.com/TailspinLearn1709/SpaceGameWebPipeline/_build/latest?definitionId=10&branchName=main)
 
 # Contributing
 
