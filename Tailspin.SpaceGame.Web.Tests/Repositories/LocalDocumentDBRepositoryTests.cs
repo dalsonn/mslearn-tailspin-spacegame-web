@@ -1,19 +1,19 @@
 using Moq;
 using TailSpin.SpaceGame.Web;
 using TailSpin.SpaceGame.Web.Models;
-using static System.Formats.Asn1.AsnWriter;
 
-namespace Tailspin.SpaceGame.Web.Tests.Controllers
+namespace Tailspin.SpaceGame.Web.Tests.Repositories
 {
-    public class HomeControllerTests
+    public class LocalDocumentDBRepositoryTests
     {
         private IDocumentDBRepository<Score> _scoreRepository;
+
+        private Mock<IDocumentDBRepository<Score>> _scoreRepositoryMock = new Mock<IDocumentDBRepository<Score>>();
 
         [SetUp]
         public void Setup()
         {
-            var scoreRepositoryMock = new Mock<IDocumentDBRepository<Score>>();
-            _scoreRepository = scoreRepositoryMock.Object;
+            _scoreRepository = _scoreRepositoryMock.Object;
         }
 
         //[Test]
@@ -44,6 +44,7 @@ namespace Tailspin.SpaceGame.Web.Tests.Controllers
                 page: PAGE,
                 pageSize: MAX_RESULTS
             );
+
             IEnumerable<Score> scores = scoresTask.Result;
 
             // Verify that each score's game region matches the provided game region.
