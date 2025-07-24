@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TailSpin.SpaceGame.Web.Models;
 
@@ -31,7 +32,7 @@ namespace TailSpin.SpaceGame.Web
         /// <param name="page">The 1-based page of results to return.</param>
         /// <param name="pageSize">The number of items on a page.</param>
         Task<IEnumerable<T>> GetItemsAsync(
-            Func<T, bool> queryPredicate,
+            Expression<Func<T, bool>> queryPredicate,
             Func<T, int> orderDescendingPredicate,
             int page = 1,
             int pageSize = 10
@@ -45,6 +46,6 @@ namespace TailSpin.SpaceGame.Web
         /// The task result contains the number of items that match the query predicate.
         /// </returns>
         /// <param name="queryPredicate">Predicate that specifies which items to select.</param>
-        Task<int> CountItemsAsync(Func<T, bool> queryPredicate);
+        Task<int> CountItemsAsync(Expression<Func<T, bool>> queryPredicate);
     }
 }
