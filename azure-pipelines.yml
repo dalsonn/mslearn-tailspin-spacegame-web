@@ -2,7 +2,7 @@ trigger:
 - '*'
 
 pool:
-  vmImage: ubuntu-20.4
+  vmImage: 'ubuntu-20.4'
 
 variables:
   buildConfiguration: 'Release'
