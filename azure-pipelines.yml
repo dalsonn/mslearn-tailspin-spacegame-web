@@ -50,6 +50,8 @@ steps:
 - task: Npm@1
   displayName: 'Run npm install'
   inputs:
+    command: 'install'
+    workingDir: '$(Build.SourcesDirectory)'
     verbose: true
 
 ## Listar os arquivos dentro de node_modules/.bin após o install
