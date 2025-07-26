@@ -29,6 +29,9 @@ steps:
 - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
   displayName: 'Write build info'
   workingDirectory: $(wwwrootDir)
+  
+- task: NuGetAuthenticate@1
+  displayName: 'Authenticate with NuGet feeds'
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore project dependencies DotNet'
