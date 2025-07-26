@@ -9,6 +9,9 @@ variables:
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '8.x'
 
+- script: dotnet --info
+  displayName: 'Check .NET SDK info'
+
 steps:
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
@@ -17,13 +20,31 @@ steps:
     version: '$(dotnetSdkVersion)'
     
 - script: |
+    echo "🔍 Verificando instalação do Mono..."
+
+    REQUIRED_VERSION="6.12.0"
+
+    if command -v mono &> /dev/null; then
+      INSTALLED_VERSION=$(mono --version | head -n 1 | awk '{print $5}')
+      echo "Mono já instalado: $INSTALLED_VERSION"
+
+      if dpkg --compare-versions "$INSTALLED_VERSION" ge "$REQUIRED_VERSION"; then
+        echo "✅ Versão do Mono atende ao requisito (>= $REQUIRED_VERSION)."
+        exit 0
+      else
+        echo "⚠️ Mono instalado é antigo. Atualizando..."
+      fi
+    else
+      echo "❌ Mono não encontrado. Instalando..."
+    fi
+
     sudo apt update
     sudo apt install -y gnupg ca-certificates
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
     echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
     sudo apt update
     sudo apt install -y mono-complete
-  displayName: 'Install Mono'
+  displayName: 'Verify and install Mono'
 
 - task: Npm@1
   displayName: 'Run npm install'
@@ -44,7 +65,7 @@ steps:
   displayName: 'Authenticate with NuGet feeds'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Restore project dependencies DotNet'
+  displayName: 'Restore DotNet dependencies'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
@@ -52,12 +73,18 @@ steps:
     nugetConfigPath: '$(Build.SourcesDirectory)/nuget.config'
     
 - task: NuGetCommand@2
-  displayName: 'Restore project dependencies NuGet'
+  displayName: 'Restore NuGet dependencies'
   inputs:
     command: 'restore'
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
     vstsFeed: '$(System.TeamProject)/Tailspin.SpaceGame.Web.Models'
+
+- script: |
+    echo "Limpando pastas de build"
+    find . -type d -name "bin" -exec rm -rf {} +
+    find . -type d -name "obj" -exec rm -rf {} +
+  displayName: 'Clean build and obj folders'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - $(buildConfiguration)'
