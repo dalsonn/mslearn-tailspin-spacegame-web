@@ -95,6 +95,13 @@ steps:
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
     vstsFeed: '$(System.TeamProject)/Tailspin.SpaceGame.Web.Models'
+    
+- task: Npm@1
+  displayName: 'Run npm build'
+  inputs:
+    command: 'custom'
+    customCommand: 'run build'
+    workingDir: '$(Build.SourcesDirectory)'
 
 - script: |
     echo "Limpando pastas de build"
