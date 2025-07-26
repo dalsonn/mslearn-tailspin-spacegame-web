@@ -57,8 +57,8 @@ steps:
 ## Listar os arquivos dentro de node_modules/.bin após o install
 - script: ls -la node_modules/.bin
   displayName: 'List contents of node_modules/.bin'
-  
- - task: Npm@1
+
+- task: Npm@1
   displayName: 'Run npm build'
   inputs:
     command: 'custom'
