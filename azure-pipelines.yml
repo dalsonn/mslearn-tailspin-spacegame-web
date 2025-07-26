@@ -42,10 +42,17 @@ steps:
     sudo apt install -y mono-complete
   displayName: 'Install Mono'
 
+- script: npm cache clean --force
+  displayName: 'Clean NPM cache'
+  
 - task: Npm@1
   displayName: 'Run npm install'
   inputs:
-    verbose: false
+    verbose: true
+
+## Listar os arquivos dentro de node_modules/.bin após o install
+- script: ls -la node_modules/.bin
+  displayName: 'List contents of node_modules/.bin'
 
 - script: './node_modules/.bin/sass $(wwwrootDir):$(wwwrootDir)'
   displayName: 'Compile Sass assets'
